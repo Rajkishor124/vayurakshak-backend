@@ -19,3 +19,7 @@ server:
 jwt:
   secret: ${JWT_SECRET}
   expiration: ${JWT_EXPIRATION}
+
+app:
+  cors:
+    allowed-origins: ${FRONTEND_URL}
