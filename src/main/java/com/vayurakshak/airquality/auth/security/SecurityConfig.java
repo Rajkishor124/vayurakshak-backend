@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -22,32 +23,34 @@ public class SecurityConfig {
 
         http
                 .csrf(csrf -> csrf.disable())
-                .cors(cors -> {})
+                .cors(Customizer.withDefaults())
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
                 .authorizeHttpRequests(auth -> auth
 
-                        // ✅ Public endpoints
                         .requestMatchers(
                                 "/api/v1/auth/**",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**"
                         ).permitAll()
 
-                        // ✅ ADMIN ONLY endpoints
                         .requestMatchers("/api/v1/org/*/admin/**")
                         .hasRole("ADMIN")
 
                         .requestMatchers("/api/v1/org/*/hotspots")
                         .hasRole("ADMIN")
 
-                        // ✅ ADMIN + RESIDENT access
                         .requestMatchers("/api/v1/org/*/reports/**")
                         .hasAnyRole("ADMIN", "RESIDENT")
 
-                        // ✅ All others require login
                         .anyRequest().authenticated()
                 )
-                .sessionManagement(session ->
-                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint((request, response, ex2) -> {
+                            response.setStatus(401);
+                            response.getWriter().write("Unauthorized");
+                        })
                 );
 
         http.addFilterBefore(
