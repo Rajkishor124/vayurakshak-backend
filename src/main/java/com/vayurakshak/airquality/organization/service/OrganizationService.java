@@ -2,6 +2,7 @@ package com.vayurakshak.airquality.organization.service;
 
 import com.vayurakshak.airquality.common.exception.ResourceNotFoundException;
 import com.vayurakshak.airquality.organization.entity.Organization;
+import com.vayurakshak.airquality.organization.entity.SubscriptionPlan;
 import com.vayurakshak.airquality.organization.repository.OrganizationRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -19,7 +20,17 @@ public class OrganizationService {
 
     private final OrganizationRepository repository;
 
+    /**
+     * Create organization with safe defaults
+     */
     public Organization create(Organization org) {
+
+        // ✅ Auto assign FREE plan if missing
+        if (org.getPlan() == null) {
+            log.warn("Plan not provided for organization '{}'. Defaulting to FREE.",
+                    org.getName());
+            org.setPlan(SubscriptionPlan.FREE);
+        }
 
         log.info("Creating organization: name={}, city={}, plan={}",
                 org.getName(),
@@ -28,7 +39,9 @@ public class OrganizationService {
 
         Organization saved = repository.save(org);
 
-        log.info("Organization created successfully with id={}", saved.getId());
+        log.info("Organization created successfully with id={} and plan={}",
+                saved.getId(),
+                saved.getPlan());
 
         return saved;
     }

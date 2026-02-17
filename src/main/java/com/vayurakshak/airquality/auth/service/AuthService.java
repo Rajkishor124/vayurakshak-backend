@@ -47,7 +47,6 @@ public class AuthService {
                     return new ResourceNotFoundException("Organization not found");
                 });
 
-        // ✅ prevent arbitrary role escalation
         String role = resolveRole(request.getRole());
 
         User user = User.builder()
@@ -65,7 +64,8 @@ public class AuthService {
                 role,
                 organization.getId());
 
-        String token = jwtService.generateToken(user.getEmail());
+        // ✅ generate token with claims
+        String token = jwtService.generateToken(user);
 
         return AuthResponse.builder()
                 .token(token)
@@ -93,23 +93,20 @@ public class AuthService {
                 user.getEmail(),
                 user.getRole());
 
-        String token = jwtService.generateToken(user.getEmail());
+        // ✅ generate token with claims
+        String token = jwtService.generateToken(user);
 
         return AuthResponse.builder()
                 .token(token)
                 .build();
     }
 
-    /**
-     * Ensures only allowed roles are assigned.
-     */
     private String resolveRole(String requestedRole) {
 
         if (requestedRole == null || requestedRole.isBlank()) {
             return DEFAULT_ROLE;
         }
 
-        // allow only predefined roles
         if (requestedRole.equals("ROLE_ADMIN") ||
                 requestedRole.equals("ROLE_RESIDENT")) {
             return requestedRole;

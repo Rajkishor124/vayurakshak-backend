@@ -22,5 +22,6 @@ public class Organization {
     private String city;
 
     @Enumerated(EnumType.STRING)
-    private SubscriptionPlan plan;
+    @Column(nullable = false)
+    private SubscriptionPlan plan = SubscriptionPlan.FREE;
 }
