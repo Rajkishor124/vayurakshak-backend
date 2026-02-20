@@ -2,9 +2,8 @@ package com.vayurakshak.airquality.report.service;
 
 import com.vayurakshak.airquality.aqi.entity.AqiRecord;
 import com.vayurakshak.airquality.aqi.repository.AqiRepository;
-import com.vayurakshak.airquality.alert.dto.AlertResponse;
 import com.vayurakshak.airquality.alert.service.SmartAlertService;
-import com.vayurakshak.airquality.common.exception.ResourceNotFoundException;
+import com.vayurakshak.airquality.infrastructure.exception.ResourceNotFoundException;
 import com.vayurakshak.airquality.organization.entity.Organization;
 import com.vayurakshak.airquality.organization.entity.SubscriptionPlan;
 import com.vayurakshak.airquality.organization.repository.OrganizationRepository;

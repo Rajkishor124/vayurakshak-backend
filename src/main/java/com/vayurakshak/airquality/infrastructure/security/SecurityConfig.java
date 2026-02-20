@@ -1,4 +1,4 @@
-package com.vayurakshak.airquality.common.security;
+package com.vayurakshak.airquality.infrastructure.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

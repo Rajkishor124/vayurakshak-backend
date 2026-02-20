@@ -4,7 +4,7 @@ import com.vayurakshak.airquality.auth.dto.AuthResponse;
 import com.vayurakshak.airquality.auth.dto.LoginRequest;
 import com.vayurakshak.airquality.auth.dto.RegisterRequest;
 import com.vayurakshak.airquality.auth.service.AuthService;
-import com.vayurakshak.airquality.common.response.ApiResponse;
+import com.vayurakshak.airquality.infrastructure.common.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;

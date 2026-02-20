@@ -1,6 +1,6 @@
 package com.vayurakshak.airquality.report.controller;
 
-import com.vayurakshak.airquality.common.response.ApiResponse;
+import com.vayurakshak.airquality.infrastructure.common.response.ApiResponse;
 import com.vayurakshak.airquality.report.dto.DashboardResponse;
 import com.vayurakshak.airquality.report.service.DashboardService;
 import io.swagger.v3.oas.annotations.tags.Tag;

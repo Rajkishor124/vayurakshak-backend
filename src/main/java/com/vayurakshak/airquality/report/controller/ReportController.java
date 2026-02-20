@@ -1,6 +1,6 @@
 package com.vayurakshak.airquality.report.controller;
 
-import com.vayurakshak.airquality.common.response.ApiResponse;
+import com.vayurakshak.airquality.infrastructure.common.response.ApiResponse;
 import com.vayurakshak.airquality.report.service.ReportService;
 import com.vayurakshak.airquality.report.dto.PollutionReportRequest;
 import com.vayurakshak.airquality.report.dto.ReportResponse;
@@ -10,8 +10,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Tag(name = "Reports", description = "Pollution reporting & viewing")
 @RestController

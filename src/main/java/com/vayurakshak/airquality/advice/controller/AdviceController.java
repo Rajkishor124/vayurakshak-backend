@@ -3,7 +3,7 @@ package com.vayurakshak.airquality.advice.controller;
 import com.vayurakshak.airquality.advice.dto.AdviceRequest;
 import com.vayurakshak.airquality.advice.dto.AdviceResponse;
 import com.vayurakshak.airquality.advice.service.AdviceService;
-import com.vayurakshak.airquality.common.response.ApiResponse;
+import com.vayurakshak.airquality.infrastructure.common.response.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

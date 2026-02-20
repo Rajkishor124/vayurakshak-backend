@@ -1,4 +1,4 @@
-package com.vayurakshak.airquality.common.response;
+package com.vayurakshak.airquality.infrastructure.common.response;
 
 import lombok.Builder;
 import lombok.Getter;

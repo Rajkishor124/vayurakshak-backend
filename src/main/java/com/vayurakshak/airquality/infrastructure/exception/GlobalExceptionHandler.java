@@ -1,6 +1,6 @@
-package com.vayurakshak.airquality.common.exception;
+package com.vayurakshak.airquality.infrastructure.exception;
 
-import com.vayurakshak.airquality.common.response.ApiResponse;
+import com.vayurakshak.airquality.infrastructure.common.response.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;

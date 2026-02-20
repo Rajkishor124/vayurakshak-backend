@@ -1,6 +1,6 @@
 package com.vayurakshak.airquality.report.controller;
 
-import com.vayurakshak.airquality.common.response.ApiResponse;
+import com.vayurakshak.airquality.infrastructure.common.response.ApiResponse;
 import com.vayurakshak.airquality.report.dto.AdminSummary;
 import com.vayurakshak.airquality.report.dto.ReportResponse;
 import com.vayurakshak.airquality.report.service.ReportService;

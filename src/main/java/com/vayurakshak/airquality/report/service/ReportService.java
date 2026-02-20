@@ -1,6 +1,6 @@
 package com.vayurakshak.airquality.report.service;
 
-import com.vayurakshak.airquality.common.exception.ResourceNotFoundException;
+import com.vayurakshak.airquality.infrastructure.exception.ResourceNotFoundException;
 import com.vayurakshak.airquality.organization.entity.Organization;
 import com.vayurakshak.airquality.organization.repository.OrganizationRepository;
 import com.vayurakshak.airquality.report.dto.PollutionReportRequest;

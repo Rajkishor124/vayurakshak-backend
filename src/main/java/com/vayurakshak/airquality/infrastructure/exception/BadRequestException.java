@@ -1,4 +1,4 @@
-package com.vayurakshak.airquality.common.exception;
+package com.vayurakshak.airquality.infrastructure.exception;
 
 public class BadRequestException extends RuntimeException {
 

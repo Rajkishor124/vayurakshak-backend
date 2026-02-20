@@ -3,7 +3,7 @@ package com.vayurakshak.airquality.aqi.controller;
 import com.vayurakshak.airquality.aqi.dto.AqiResponse;
 import com.vayurakshak.airquality.aqi.entity.AqiRecord;
 import com.vayurakshak.airquality.aqi.service.AqiService;
-import com.vayurakshak.airquality.common.response.ApiResponse;
+import com.vayurakshak.airquality.infrastructure.common.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;

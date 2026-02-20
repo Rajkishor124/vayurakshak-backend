@@ -1,4 +1,4 @@
-package com.vayurakshak.airquality.common.security;
+package com.vayurakshak.airquality.infrastructure.security;
 
 import com.vayurakshak.airquality.organization.entity.SubscriptionPlan;
 import com.vayurakshak.airquality.user.entity.User;

@@ -1,4 +1,4 @@
-package com.vayurakshak.airquality.common.controller;
+package com.vayurakshak.airquality.infrastructure.monitoring;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

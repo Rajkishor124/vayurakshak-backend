@@ -1,6 +1,6 @@
 package com.vayurakshak.airquality.organization.controller;
 
-import com.vayurakshak.airquality.common.response.ApiResponse;
+import com.vayurakshak.airquality.infrastructure.common.response.ApiResponse;
 import com.vayurakshak.airquality.organization.entity.Organization;
 import com.vayurakshak.airquality.organization.service.OrganizationService;
 import io.swagger.v3.oas.annotations.tags.Tag;

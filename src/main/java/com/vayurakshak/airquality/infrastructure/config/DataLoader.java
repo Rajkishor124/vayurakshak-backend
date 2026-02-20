@@ -1,4 +1,4 @@
-package com.vayurakshak.airquality.config;
+package com.vayurakshak.airquality.infrastructure.config;
 
 import com.vayurakshak.airquality.aqi.entity.AqiRecord;
 import com.vayurakshak.airquality.aqi.repository.AqiRepository;
