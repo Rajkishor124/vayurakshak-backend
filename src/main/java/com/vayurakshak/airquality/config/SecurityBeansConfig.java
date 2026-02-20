@@ -1,4 +1,4 @@
-package com.vayurakshak.airquality.common.config;
+package com.vayurakshak.airquality.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,4 +1,4 @@
-package com.vayurakshak.airquality.auth.security;
+package com.vayurakshak.airquality.common.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

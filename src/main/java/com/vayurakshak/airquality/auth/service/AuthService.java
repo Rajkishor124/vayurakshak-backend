@@ -3,7 +3,7 @@ package com.vayurakshak.airquality.auth.service;
 import com.vayurakshak.airquality.auth.dto.AuthResponse;
 import com.vayurakshak.airquality.auth.dto.LoginRequest;
 import com.vayurakshak.airquality.auth.dto.RegisterRequest;
-import com.vayurakshak.airquality.auth.security.JwtService;
+import com.vayurakshak.airquality.common.security.JwtService;
 import com.vayurakshak.airquality.common.exception.BadRequestException;
 import com.vayurakshak.airquality.common.exception.ResourceNotFoundException;
 import com.vayurakshak.airquality.organization.entity.Organization;
