@@ -30,7 +30,9 @@ public class CustomUserDetailsService implements UserDetailsService {
                 user.getRole(),
                 user.getOrganization().getId(),
                 user.getOrganization().getPlan().name(),
-                List.of(new SimpleGrantedAuthority(user.getRole()))
+                List.of(
+                        new SimpleGrantedAuthority(user.getRole().name())
+                )
         );
     }
 }

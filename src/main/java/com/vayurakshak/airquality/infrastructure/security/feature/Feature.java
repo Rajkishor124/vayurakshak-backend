@@ -2,9 +2,17 @@ package com.vayurakshak.airquality.infrastructure.security.feature;
 
 public enum Feature {
 
-    BASIC_ALERTS,
-    SMART_ALERTS,
+    // 📝 Report Module
+    REPORT_SUBMISSION,
+    REPORT_VIEW,
+    REPORT_DELETE,
+
+    // 📊 Analytics
     DASHBOARD_ANALYTICS,
     HOTSPOT_DETECTION,
-    ADMIN_REPORTS
+    ADMIN_ANALYTICS,
+
+    // 🚨 Alert System
+    BASIC_ALERTS,
+    SMART_ALERTS
 }

@@ -1,11 +1,13 @@
 package com.vayurakshak.airquality.report.submission.service;
 
 import com.vayurakshak.airquality.infrastructure.exception.ResourceNotFoundException;
+import com.vayurakshak.airquality.infrastructure.exception.UnauthorizedException;
 import com.vayurakshak.airquality.infrastructure.security.OrgValidationUtil;
 import com.vayurakshak.airquality.infrastructure.security.context.CurrentUserProvider;
 import com.vayurakshak.airquality.infrastructure.security.feature.Feature;
 import com.vayurakshak.airquality.infrastructure.security.feature.FeatureGateService;
 import com.vayurakshak.airquality.organization.entity.Organization;
+import com.vayurakshak.airquality.organization.enums.SubscriptionPlan;
 import com.vayurakshak.airquality.organization.repository.OrganizationRepository;
 import com.vayurakshak.airquality.report.submission.dto.PollutionReportRequest;
 import com.vayurakshak.airquality.report.submission.dto.ReportResponse;
@@ -29,27 +31,19 @@ public class ReportService {
     private final FeatureGateService featureGateService;
     private final CurrentUserProvider currentUserProvider;
 
-    /**
-     * Submit new pollution report
-     */
     @Transactional
-    public void submitReport(PollutionReportRequest request) {
+    public void submitReport(Long orgId, PollutionReportRequest request) {
 
-        Long orgId = currentUserProvider.getCurrentOrganizationId();
-
+        // 🔐 Strict org isolation
         orgValidationUtil.validateOrgAccess(orgId);
 
-        // 🎛 Feature gating (basic reports allowed for FREE)
-        featureGateService.checkAccess(Feature.BASIC_ALERTS);
-
-        log.info("Submitting report for orgId={}, type={}, location={}",
-                orgId,
-                request.getType(),
-                request.getLocation());
+        featureGateService.checkAccess(Feature.REPORT_SUBMISSION);
 
         Organization organization = organizationRepository.findById(orgId)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Organization not found"));
+
+        enforcePlanSubmissionLimit(organization);
 
         PollutionReport report = PollutionReport.builder()
                 .type(request.getType())
@@ -60,22 +54,16 @@ public class ReportService {
 
         reportRepository.save(report);
 
-        log.info("Report saved successfully for orgId={}", orgId);
+        log.info("Report submitted: orgId={}, type={}", orgId, request.getType());
     }
 
-    /**
-     * Fetch reports (multi-tenant safe + soft delete safe)
-     */
     @Transactional(readOnly = true)
     public Page<ReportResponse> getReportsByOrganization(
             Long orgId,
             Pageable pageable) {
 
         orgValidationUtil.validateOrgAccess(orgId);
-
-        featureGateService.checkAccess(Feature.BASIC_ALERTS);
-
-        log.debug("Fetching reports for orgId={}", orgId);
+        featureGateService.checkAccess(Feature.REPORT_VIEW);
 
         return reportRepository
                 .findByOrganizationIdAndDeletedFalse(orgId, pageable)
@@ -88,13 +76,14 @@ public class ReportService {
                         .build());
     }
 
-    /**
-     * Soft delete report
-     */
     @Transactional
     public void deleteReport(Long orgId, Long reportId) {
 
         orgValidationUtil.validateOrgAccess(orgId);
+
+        if (!"ROLE_ADMIN".equals(currentUserProvider.getCurrentRole())) {
+            throw new UnauthorizedException("Only admin can delete reports");
+        }
 
         PollutionReport report = reportRepository
                 .findByIdAndOrganizationIdAndDeletedFalse(reportId, orgId)
@@ -104,5 +93,22 @@ public class ReportService {
         report.setDeleted(true);
 
         log.info("Report soft deleted: {}", reportId);
+    }
+
+    // 🏆 Plan-based submission limits
+    private void enforcePlanSubmissionLimit(Organization org) {
+
+        long totalReports =
+                reportRepository.countByOrganizationIdAndDeletedFalse(org.getId());
+
+        if (org.getPlan() == SubscriptionPlan.FREE && totalReports >= 50) {
+            throw new UnauthorizedException(
+                    "Free plan limit reached (50 reports). Upgrade required.");
+        }
+
+        if (org.getPlan() == SubscriptionPlan.PRO && totalReports >= 500) {
+            throw new UnauthorizedException(
+                    "Pro plan limit reached (500 reports). Upgrade required.");
+        }
     }
 }

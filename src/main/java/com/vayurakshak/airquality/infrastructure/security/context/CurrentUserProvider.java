@@ -2,6 +2,7 @@ package com.vayurakshak.airquality.infrastructure.security.context;
 
 import com.vayurakshak.airquality.infrastructure.exception.UnauthorizedException;
 import com.vayurakshak.airquality.infrastructure.security.CustomUserPrincipal;
+import com.vayurakshak.airquality.user.enums.UserRole;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -28,7 +29,7 @@ public class CurrentUserProvider {
         return getPrincipal().getOrgId();
     }
 
-    public String getCurrentRole() {
+    public UserRole getCurrentRole() {
         return getPrincipal().getRole();
     }
 

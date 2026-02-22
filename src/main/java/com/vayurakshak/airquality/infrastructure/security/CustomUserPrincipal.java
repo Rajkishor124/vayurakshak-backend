@@ -1,5 +1,6 @@
 package com.vayurakshak.airquality.infrastructure.security;
 
+import com.vayurakshak.airquality.user.enums.UserRole;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,14 +12,14 @@ public class CustomUserPrincipal implements UserDetails {
 
     private final String email;
     private final String password;
-    private final String role;
+    private final UserRole role;
     private final Long orgId;
     private final String subscriptionPlan;
     private final Collection<? extends GrantedAuthority> authorities;
 
     public CustomUserPrincipal(String email,
                                String password,
-                               String role,
+                               UserRole role,
                                Long orgId,
                                String subscriptionPlan,
                                Collection<? extends GrantedAuthority> authorities) {

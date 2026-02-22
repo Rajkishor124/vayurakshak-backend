@@ -29,6 +29,9 @@ public class AuthService {
 
     private static final UserRole DEFAULT_ROLE = UserRole.ROLE_RESIDENT;
 
+    /**
+     * User Registration
+     */
     @Transactional
     public AuthResponse register(RegisterRequest request) {
 
@@ -56,7 +59,7 @@ public class AuthService {
                 .name(request.getName().trim())
                 .email(email)
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(role.name())
+                .role(role) // ✅ ENUM (not string)
                 .organization(organization)
                 .build();
 
@@ -72,6 +75,9 @@ public class AuthService {
                 .build();
     }
 
+    /**
+     * User Login
+     */
     @Transactional(readOnly = true)
     public AuthResponse login(LoginRequest request) {
 
@@ -86,7 +92,8 @@ public class AuthService {
             throw new BadRequestException("Invalid credentials");
         }
 
-        log.info("Login successful: email={}, role={}", email, user.getRole());
+        log.info("Login successful: email={}, role={}",
+                email, user.getRole());
 
         String token = jwtService.generateToken(user);
 
