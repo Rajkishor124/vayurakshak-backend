@@ -1,44 +1,48 @@
 package com.vayurakshak.airquality.advice.service;
 
 import com.vayurakshak.airquality.advice.dto.AdviceResponse;
-import org.springframework.stereotype.Service;
+import com.vayurakshak.airquality.advice.enums.RiskLevel;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Service
+@Slf4j
+@Component
 public class AiDecisionEngine {
 
     public AdviceResponse generateAdvice(int aqi, int age, boolean hasIssue) {
 
+        log.info("Generating advice for AQI: {}, Age: {}, RespiratoryIssue: {}",
+                aqi, age, hasIssue);
+
         if (aqi > 300) {
-            return AdviceResponse.builder()
-                    .riskLevel("High")
-                    .recommendations(List.of(
-                            "Avoid outdoor activities",
-                            "Wear N95 mask if going outside",
-                            "Keep windows closed",
-                            "Use air purifier if available"
-                    ))
-                    .build();
+            return buildResponse(RiskLevel.HIGH, List.of(
+                    "Avoid outdoor activities",
+                    "Wear N95 mask if going outside",
+                    "Keep windows closed",
+                    "Use air purifier if available"
+            ));
         }
 
         if (aqi > 200 && (age > 60 || hasIssue)) {
-            return AdviceResponse.builder()
-                    .riskLevel("Moderate")
-                    .recommendations(List.of(
-                            "Limit outdoor exposure",
-                            "Avoid heavy exercise",
-                            "Prefer indoor workouts"
-                    ))
-                    .build();
+            return buildResponse(RiskLevel.MODERATE, List.of(
+                    "Limit outdoor exposure",
+                    "Avoid heavy exercise",
+                    "Prefer indoor workouts"
+            ));
         }
 
+        return buildResponse(RiskLevel.LOW, List.of(
+                "Outdoor activities are safe",
+                "Maintain regular precautions"
+        ));
+    }
+
+    private AdviceResponse buildResponse(RiskLevel level, List<String> recommendations) {
         return AdviceResponse.builder()
-                .riskLevel("Low")
-                .recommendations(List.of(
-                        "Outdoor activities are safe",
-                        "Maintain regular precautions"
-                ))
+                .riskLevel(level)
+                .recommendations(recommendations)
                 .build();
     }
 }

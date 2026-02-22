@@ -1,9 +1,11 @@
 package com.vayurakshak.airquality.alert.dto;
 
-import com.vayurakshak.airquality.alert.entity.AlertSeverity;
+import com.vayurakshak.airquality.alert.enums.AlertSeverity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Builder
@@ -17,4 +19,8 @@ public class AlertResponse {
     private String message;
 
     private AlertSeverity severity;
+
+    private boolean acknowledged;
+
+    private LocalDateTime createdAt;
 }

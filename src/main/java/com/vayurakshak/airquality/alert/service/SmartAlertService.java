@@ -1,20 +1,34 @@
 package com.vayurakshak.airquality.alert.service;
 
 import com.vayurakshak.airquality.alert.dto.AlertResponse;
-import com.vayurakshak.airquality.alert.entity.AlertSeverity;
+import com.vayurakshak.airquality.alert.enums.AlertSeverity;
+import com.vayurakshak.airquality.infrastructure.security.feature.Feature;
+import com.vayurakshak.airquality.infrastructure.security.feature.FeatureGateService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
+@Slf4j
+@Component
 @RequiredArgsConstructor
 public class SmartAlertService {
+
+    private final FeatureGateService featureGateService;
 
     public List<AlertResponse> generateAlerts(int aqiValue,
                                               int riskScore,
                                               long hotspotCount) {
+
+        // 🔐 Subscription-based gating
+        featureGateService.checkAccess(Feature.SMART_ALERTS);
+
+        validateInputs(aqiValue, riskScore, hotspotCount);
+
+        log.debug("Generating smart alerts: AQI={}, RiskScore={}, Hotspots={}",
+                aqiValue, riskScore, hotspotCount);
 
         List<AlertResponse> alerts = new ArrayList<>();
 
@@ -31,6 +45,13 @@ public class SmartAlertService {
         }
 
         return alerts;
+    }
+
+    private void validateInputs(int aqiValue, int riskScore, long hotspotCount) {
+
+        if (aqiValue < 0 || riskScore < 0 || hotspotCount < 0) {
+            throw new IllegalArgumentException("Alert metrics cannot be negative");
+        }
     }
 
     private void evaluateAqiAlerts(List<AlertResponse> alerts, int aqiValue) {
@@ -75,6 +96,7 @@ public class SmartAlertService {
     private AlertResponse buildAlert(String title,
                                      String message,
                                      AlertSeverity severity) {
+
         return AlertResponse.builder()
                 .title(title)
                 .message(message)

@@ -1,10 +1,8 @@
 package com.vayurakshak.airquality.auth.dto;
 
+import com.vayurakshak.airquality.user.enums.UserRole;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,20 +12,27 @@ import lombok.Setter;
 public class RegisterRequest {
 
     @NotBlank(message = "Name is required")
+    @Size(max = 100, message = "Name must not exceed 100 characters")
     @Schema(example = "Rajkishor Murmu")
     private String name;
 
     @Email(message = "Enter a valid email")
     @NotBlank(message = "Email is required")
+    @Size(max = 150, message = "Email must not exceed 150 characters")
     @Schema(example = "raj@gmail.com")
     private String email;
 
-    @Size(min = 6, message = "Password must be at least 6 characters")
-    @Schema(example = "password123")
+    @NotBlank(message = "Password is required")
+    @Size(min = 8, max = 100, message = "Password must be between 8 and 100 characters")
+    @Pattern(
+            regexp = "^(?=.*[A-Za-z])(?=.*\\d).+$",
+            message = "Password must contain at least one letter and one number"
+    )
+    @Schema(example = "Password123")
     private String password;
 
     @Schema(example = "ROLE_RESIDENT")
-    private String role;
+    private UserRole role;   // safer than String
 
     @NotNull(message = "Organization is required")
     @Schema(example = "1")

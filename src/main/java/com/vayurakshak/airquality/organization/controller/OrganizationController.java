@@ -1,6 +1,7 @@
 package com.vayurakshak.airquality.organization.controller;
 
-import com.vayurakshak.airquality.infrastructure.common.response.ApiResponse;
+import com.vayurakshak.airquality.organization.dto.OrganizationResponse;
+import com.vayurakshak.airquality.shared.response.ApiResponse;
 import com.vayurakshak.airquality.organization.entity.Organization;
 import com.vayurakshak.airquality.organization.service.OrganizationService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -19,17 +20,30 @@ public class OrganizationController {
     private final OrganizationService service;
 
     @PostMapping
-    public ApiResponse<Organization> create(@Valid @RequestBody Organization org) {
-        return ApiResponse.success("Organization created", service.create(org));
-    }
+    public ApiResponse<OrganizationResponse> create(
+            @Valid @RequestBody Organization org) {
 
-    @GetMapping
-    public ApiResponse<List<Organization>> getAll() {
-        return ApiResponse.success(service.getAll());
+        Organization saved = service.create(org);
+
+        return ApiResponse.success(
+                "Organization created",
+                map(saved)
+        );
     }
 
     @GetMapping("/{id}")
-    public ApiResponse<Organization> getById(@PathVariable Long id) {
-        return ApiResponse.success(service.getById(id));
+    public ApiResponse<OrganizationResponse> getById(@PathVariable Long id) {
+
+        return ApiResponse.success(map(service.getById(id)));
+    }
+
+    private OrganizationResponse map(Organization org) {
+        return OrganizationResponse.builder()
+                .id(org.getId())
+                .name(org.getName())
+                .type(org.getType())
+                .city(org.getCity())
+                .plan(org.getPlan())
+                .build();
     }
 }

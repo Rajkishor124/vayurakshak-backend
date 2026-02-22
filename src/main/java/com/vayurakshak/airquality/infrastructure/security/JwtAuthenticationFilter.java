@@ -2,17 +2,20 @@ package com.vayurakshak.airquality.infrastructure.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.*;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -28,30 +31,34 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         final String authHeader = request.getHeader("Authorization");
 
-        // no header OR wrong format
+        // No Authorization header or incorrect format
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        String token = authHeader.substring(7);
+        final String token = authHeader.substring(7).trim();
 
-        // prevent parsing invalid tokens
-        if (token == null || token.trim().isEmpty()
-                || token.equalsIgnoreCase("null")
-                || token.equalsIgnoreCase("undefined")) {
+        // Prevent invalid tokens like null / undefined
+        if (token.isEmpty()
+                || "null".equalsIgnoreCase(token)
+                || "undefined".equalsIgnoreCase(token)) {
             filterChain.doFilter(request, response);
             return;
         }
 
         try {
-            String email = jwtService.extractUsername(token);
 
-            if (email != null &&
-                    SecurityContextHolder.getContext().getAuthentication() == null) {
+            final String email = jwtService.extractUsername(token);
 
-                UserDetails userDetails =
-                        userDetailsService.loadUserByUsername(email);
+            Authentication existingAuth =
+                    SecurityContextHolder.getContext().getAuthentication();
+
+            if (email != null && existingAuth == null) {
+
+                CustomUserPrincipal userDetails =
+                        (CustomUserPrincipal) userDetailsService
+                                .loadUserByUsername(email);
 
                 if (jwtService.isTokenValid(token, userDetails)) {
 
@@ -69,12 +76,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                     SecurityContextHolder.getContext()
                             .setAuthentication(authToken);
+
+                    log.debug("JWT authenticated user: {}", email);
                 }
             }
 
         } catch (Exception ex) {
-            // prevent crash
-            logger.warn("Invalid JWT token", ex);
+            log.warn("JWT authentication failed: {}", ex.getMessage());
         }
 
         filterChain.doFilter(request, response);

@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface AqiRepository extends JpaRepository<AqiRecord, Long> {
 
-    Optional<AqiRecord> findTopByCityOrderByTimestampDesc(String city);
+    Optional<AqiRecord> findTopByCityIgnoreCaseAndDeletedFalseOrderByTimestampDesc(String city);
 }

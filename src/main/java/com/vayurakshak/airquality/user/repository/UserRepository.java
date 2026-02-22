@@ -7,5 +7,15 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    Optional<User> findByEmail(String email);
+    // 🔐 Soft-delete safe login
+    Optional<User> findByEmailIgnoreCaseAndDeletedFalse(String email);
+
+    // 🔎 Existence check (soft-delete safe)
+    boolean existsByEmailIgnoreCaseAndDeletedFalse(String email);
+
+    // 🔐 Secure user fetch within organization
+    Optional<User> findByIdAndOrganizationIdAndDeletedFalse(
+            Long userId,
+            Long organizationId
+    );
 }

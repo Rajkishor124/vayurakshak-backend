@@ -3,7 +3,7 @@ package com.vayurakshak.airquality.infrastructure.config;
 import com.vayurakshak.airquality.aqi.entity.AqiRecord;
 import com.vayurakshak.airquality.aqi.repository.AqiRepository;
 import com.vayurakshak.airquality.organization.entity.Organization;
-import com.vayurakshak.airquality.organization.entity.SubscriptionPlan;
+import com.vayurakshak.airquality.organization.enums.SubscriptionPlan;
 import com.vayurakshak.airquality.organization.repository.OrganizationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;

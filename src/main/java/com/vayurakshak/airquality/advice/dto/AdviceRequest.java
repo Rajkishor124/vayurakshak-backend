@@ -1,6 +1,7 @@
 package com.vayurakshak.airquality.advice.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -15,7 +16,8 @@ public class AdviceRequest {
     @Schema(example = "Delhi")
     private String city;
 
-    @Min(value = 1, message = "Age must be valid")
+    @Min(value = 1, message = "Age must be at least 1")
+    @Max(value = 120, message = "Age must not exceed 120")
     @Schema(example = "30")
     private int age;
 

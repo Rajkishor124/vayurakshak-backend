@@ -1,10 +1,10 @@
 package com.vayurakshak.airquality.alert.entity;
 
+import com.vayurakshak.airquality.alert.enums.AlertSeverity;
+import com.vayurakshak.airquality.infrastructure.common.base.BaseEntity;
 import com.vayurakshak.airquality.organization.entity.Organization;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "alerts")
@@ -13,30 +13,22 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Alert {
+public class Alert extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+    @Column(nullable = false)
     private String title;
 
-    @Column(length = 500)
+    @Column(length = 500, nullable = false)
     private String message;
 
-    private String severity; // INFO, MEDIUM, HIGH, CRITICAL
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private AlertSeverity severity;
 
-    private boolean acknowledged; // user has seen alert
-
-    private LocalDateTime createdAt;
+    @Column(nullable = false)
+    private boolean acknowledged = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "organization_id")
+    @JoinColumn(name = "organization_id", nullable = false)
     private Organization organization;
-
-    @PrePersist
-    public void prePersist() {
-        this.createdAt = LocalDateTime.now();
-        this.acknowledged = false;
-    }
 }

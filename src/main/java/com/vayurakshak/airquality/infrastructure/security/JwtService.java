@@ -1,6 +1,6 @@
 package com.vayurakshak.airquality.infrastructure.security;
 
-import com.vayurakshak.airquality.organization.entity.SubscriptionPlan;
+import com.vayurakshak.airquality.organization.enums.SubscriptionPlan;
 import com.vayurakshak.airquality.user.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
